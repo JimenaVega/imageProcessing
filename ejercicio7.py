@@ -5,7 +5,8 @@ Created on Tue Jun 30 16:03:20 2020
 @author: miner
 """
 
-from tool._fixedInt import *
+#from tool._fixedInt import *
+import tool._fixedInt as fp
 from skimage.exposure import rescale_intensity
 from skimage.exposure import equalize_adapthist
 import matplotlib.pyplot as plt
@@ -16,6 +17,7 @@ import cv2
 
 
 # In[]:Functions
+
 def swapKernel(kernel):
     kernel[:,[0, 2]] = kernel[:,[2, 0]]
     kernel[[0,2],:]  = kernel[[2,0],:]
@@ -118,9 +120,9 @@ path = "descarga.jpg"
 
 ap.add_argument("-i", "--image", required=False, help="Path to the input image",default=path)
 #ap.add_argument("-k", "--kernel",               help="Path to the kernel")
-args = ap.parse_args()
+args  = ap.parse_args()
 image = cv2.imread(args.image,1)
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+gray  = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
 kernel = kernels['edge_detect2']
@@ -141,22 +143,9 @@ img   = scalingI(conv1,255,0).astype('uint8')
 #scaling 2
 In = scalingI(gray,1,0)
 kn = kernelNorm(kernel)
-conv = convolution2D(In, kn)
-
-print('-'*70)
-print('Val min={0}\nVal max = {1}'.format(np.amin(conv),np.amax(conv)))
-
-#row,col = conv.shap
-# for i in range(int(row)):
-#     for j in range(int(col)):
-#         if(conv[i][j]<=0):
-#             conv[i][j]=1 #mejora un poco
-            #conv[i][j]=np.absolute(conv[i][j]) #peor que el anterior
-                      
-conv = np.clip(conv,0,1)
-#conv = np.abs(conv)
+conv = convolution2D(In, kn)                      
+conv = equalize_adapthist(np.clip(conv,0,1))
 conv_image = scalingI(conv,255,0).astype('uint8')
-conv_image = equalize_adapthist(conv_image)
 
 
 #show image
