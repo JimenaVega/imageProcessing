@@ -5,8 +5,8 @@ Created on Tue Jun 30 16:03:20 2020
 @author: miner
 """
 
-#from tool._fixedInt import *
-import tool._fixedInt as fp
+from tool._fixedInt import *
+#import tool._fixedInt as fp
 from skimage.exposure import rescale_intensity
 from skimage.exposure import equalize_adapthist
 import matplotlib.pyplot as plt
@@ -109,8 +109,6 @@ kernels = {
     }
 
 
-
-
 ap = argparse.ArgumentParser( description="Convolution 2D: This function compare opencv and interative method.")
 
 #reception of data
@@ -123,24 +121,17 @@ ap.add_argument("-i", "--image", required=False, help="Path to the input image",
 args  = ap.parse_args()
 image = cv2.imread(args.image,1)
 gray  = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-
 kernel = kernels['edge_detect2']
 
 #swaps kernel
 kernel = swapKernel(kernel)
 
-
-
 #scaling 0  
 opencvOutput = cv2.filter2D(gray, -1, kernel) 
 print('OPENC CV SCALLED AND CONV IMAGE')
 
-#scaling 1
-conv1 = convolution2D(gray, kernel)
-img   = scalingI(conv1,255,0).astype('uint8')
 
-#scaling 2
+#scaling 1
 In = scalingI(gray,1,0)
 kn = kernelNorm(kernel)
 conv = convolution2D(In, kn)                      
@@ -151,12 +142,23 @@ conv_image = scalingI(conv,255,0).astype('uint8')
 #show image
 cv2.imshow("Edge Dectect - opencv", opencvOutput) 
 cv2.imshow("jime #2 ", conv_image)
-#cv2.imshow("jime #1 ", img)
-plotHist(conv_image, opencvOutput,"scaling #2",1)
-#plotHist(img, opencvOutput,"scaling #1",2)
+plotHist(conv_image, opencvOutput,"scaling #1",1)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
     
- 
+# In[2]: quantification
+
+knQuant = arrayFixedInt(8,7,np.ravel(kn), signedMode='S', roundMode='trunc', saturateMode='saturate')
+InQuant = arrayFixedInt(8,7,np.ravel(In), signedMode='S', roundMode='trunc', saturateMode='saturate')
+
+   
+for i in range(9):
+    print(knQuant[i].fValue)
+
+
+
+
+
+
 
      
