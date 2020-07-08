@@ -147,23 +147,15 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
     
 # In[2]: quantification
-
-# knQuant = arrayFixedInt(8,7,np.ravel(kn), signedMode='S', roundMode='trunc', saturateMode='saturate')
-# inQuant = arrayFixedInt(8,7,np.ravel(img), signedMode='S', roundMode='trunc', saturateMode='saturate')
-# for i in range(9):
-#     print(knQuant[i].fValue)
-
-#This works for just one row
-knQuant = np.zeros((kn.shape[0],kn.shape[1]))
-aux=arrayFixedInt(8,7,kn[0], signedMode='S', roundMode='trunc', saturateMode='saturate')
-aux2 = np.zeros(3)
-for i in range(3):
-    aux2[i] = aux[i].fValue
-knQuant[0] = aux2
-# print(knQuant[0].fValue)
-# kesos= img.shape[0] #filas
-# print(kesos)
-# print(img.shape[1]) #col
+def fixedArrayIntoFloatArray(mtx,NB,NBF):
+    
+    quant = np.zeros((mtx.shape[0],mtx.shape[1]))
+    for i in range(mtx.shape[0]):
+        aux=arrayFixedInt(NB,NBF,kn[i], signedMode='S', roundMode='trunc', saturateMode='saturate')
+        for j in range(mtx.shape[1]):
+            aux[j]=aux[j].fValue
+        quant[i]=aux
+    
 
 
 
