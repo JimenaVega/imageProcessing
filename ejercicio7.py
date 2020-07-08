@@ -132,32 +132,38 @@ print('OPENC CV SCALLED AND CONV IMAGE')
 
 
 #scaling 1
-In = scalingI(gray,1,0)
+img = scalingI(gray,1,0)
 kn = kernelNorm(kernel)
-conv = convolution2D(In, kn)                      
+conv = convolution2D(img, kn)                      
 conv = equalize_adapthist(np.clip(conv,0,1))
 conv_image = scalingI(conv,255,0).astype('uint8')
 
 
 #show image
-cv2.imshow("Edge Dectect - opencv", opencvOutput) 
-cv2.imshow("jime #2 ", conv_image)
-plotHist(conv_image, opencvOutput,"scaling #1",1)
+# cv2.imshow("Edge Dectect - opencv", opencvOutput) 
+# cv2.imshow("jime #2 ", conv_image)
+# plotHist(conv_image, opencvOutput,"scaling #1",1)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
     
 # In[2]: quantification
 
-knQuant = arrayFixedInt(8,7,np.ravel(kn), signedMode='S', roundMode='trunc', saturateMode='saturate')
-InQuant = arrayFixedInt(8,7,np.ravel(In), signedMode='S', roundMode='trunc', saturateMode='saturate')
+# knQuant = arrayFixedInt(8,7,np.ravel(kn), signedMode='S', roundMode='trunc', saturateMode='saturate')
+# inQuant = arrayFixedInt(8,7,np.ravel(img), signedMode='S', roundMode='trunc', saturateMode='saturate')
+# for i in range(9):
+#     print(knQuant[i].fValue)
 
-   
-for i in range(9):
-    print(knQuant[i].fValue)
-
-
-
-
+#This works for just one row
+knQuant = np.zeros((kn.shape[0],kn.shape[1]))
+aux=arrayFixedInt(8,7,kn[0], signedMode='S', roundMode='trunc', saturateMode='saturate')
+aux2 = np.zeros(3)
+for i in range(3):
+    aux2[i] = aux[i].fValue
+knQuant[0] = aux2
+# print(knQuant[0].fValue)
+# kesos= img.shape[0] #filas
+# print(kesos)
+# print(img.shape[1]) #col
 
 
 
